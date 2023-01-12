@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "math.h": "c",
+        "stdio.h": "c",
+        "stdlib.h": "c"
+    },
+    "terminal.integraded.shell.windows": "C:\\cygwin64\\bin\\bash.exe"
+}
