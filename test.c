@@ -6,21 +6,24 @@
 // Declarations
 // Swap: contains two parameters of type "float pointer"
 // Swaps the contents of each pointer with each other. No return value
-void swap(float *a, float *b);
-void print_arr(float arr[], int len);
-void selection_sort(float arr[], int len);
-void bubble_sort(float arr[], int len);
-void insertion_sort(float arr[], int len);
+
+void quick_sort(float arr[], int lower_bound, int upper_bound);
 void heap_sort(float arr[], int len);
 void heapify(int parent_node, int len, float arr[]);
-void quick_sort(float arr[], int lower_bound, int upper_bound);
-void divide(int lower_bound, int comparitor, int partition);
+void insertion_sort(float arr[], int len);
+void bubble_sort(float arr[], int len);
+
+// Formatted to use pointer arithmetic
+void selection_sort(float *arr, int len);
+void print_arr(float *arr, int len);
+void swap(float *a, float *b);
 
 int main()
 {
     float nums[14] = {10, 35, 1, 38, 2, 13, 39, 4, 34, 3, 36, 37, 5, 6};
     int len = 14;
-    quick_sort(nums, 0, len - 1);
+    // quick_sort(nums, 0, len - 1);
+    selection_sort(nums, len);
 
     printf("Sorted Array:\n");
     print_arr(nums, len);
@@ -71,10 +74,6 @@ void quick_sort(float arr[], int lower_bound, int upper_bound)
         // upper_bound = lower_bound - 1
         quick_sort(arr, static_lower_bound, lower_bound - 1);
     }
-}
-
-void divide(int lower_bound, int comparitor, int partition)
-{
 }
 
 void heap_sort(float arr[], int len)
@@ -183,7 +182,7 @@ void bubble_sort(float arr[], int len)
     }
 }
 
-void selection_sort(float arr[], int len)
+void selection_sort(float *arr, int len)
 {
     // Three variables:
     // 1. Counter for parent loop (main array)
@@ -196,14 +195,14 @@ void selection_sort(float arr[], int len)
         for (int j = i + 1; j < len; j++) // Define child loop counter (2) as minimum value of sub-array
         {
             // Iterate through entire sub-array testing each element against currect minimum value
-            if (arr[j] < arr[min_value])
+            if (*(arr + j) < *(arr + min_value))
             {
                 min_value = j; // assigns min_value as position of min value
             }
         }
         if (min_value != i) // Executes swap except when array postion at "i" counter already contains min_value
         {
-            swap(&arr[i], &arr[min_value]);
+            swap(arr + i, arr + min_value);
         }
     }
 }
@@ -216,11 +215,11 @@ void swap(float *a, float *b)
     *b = temp;
 }
 
-void print_arr(float arr[], int len)
+void print_arr(float *arr, int len)
 {
     for (int j = 0; j < len; j++)
     {
-        printf("%f  ", arr[j]);
+        printf("%f  ", *(arr + j));
     }
 }
 
