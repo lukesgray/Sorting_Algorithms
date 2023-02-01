@@ -7,6 +7,7 @@
 // Swap: contains two parameters of type "float pointer"
 // Swaps the contents of each pointer with each other. No return value
 
+void quick_sort_pa(float arr[], int len);
 void quick_sort(float arr[], int lower_bound, int upper_bound);
 void heap_sort(float arr[], int len);
 void heapify(int parent_node, int len, float arr[]);
@@ -23,11 +24,56 @@ int main()
     float nums[14] = {10, 35, 1, 38, 2, 13, 39, 4, 34, 3, 36, 37, 5, 6};
     int len = 14;
     // quick_sort(nums, 0, len - 1);
-    selection_sort(nums, len);
+    quick_sort_pa(nums, len);
 
     printf("Sorted Array:\n");
     print_arr(nums, len);
     return 0;
+}
+
+// this is quick sort where we use array arithmetic to pass in sub-arrays when recursivly calling quick_sort_pa
+void quick_sort_pa(float arr[], int len)
+{
+    // define comparitor as 0 which is the lower bound of passed in array
+    int comparitor = 0;
+
+    // set pivot to equal array element at "len" position
+    int pivot = len - 1;
+
+    // set lower bound equal to 0
+    int lower_bound = 0;
+
+    // loop to iterate through array comparing upper_bound value (pivot) with each element
+    while (comparitor < pivot)
+    {
+        // move each element smaller than pivot to position lower than lower bound
+        if (arr[comparitor] < arr[pivot])
+        {
+            swap(&arr[lower_bound], &arr[comparitor]);
+            lower_bound++;
+        }
+
+        comparitor++;
+    }
+
+    // move pivot to correct position
+    swap(&arr[lower_bound], &arr[pivot]);
+
+    // condition to define base case for right split:
+    if (pivot - lower_bound > 1)
+    {
+        // recursivly call quicksort on upper half of array
+        // the first argument in this function call is not the first address in the array
+        // this is how we can elimnate an argument to this function (dynamically passing in different addresses from the array)
+        quick_sort_pa(&arr[lower_bound + 1], len - lower_bound - 1);
+    }
+
+    // condition to define base case for left split:
+    if (lower_bound > 1)
+    {
+        // recursivly call quicksort on lower half of array
+        quick_sort_pa(arr, lower_bound);
+    }
 }
 
 void quick_sort(float arr[], int lower_bound, int upper_bound)
@@ -195,7 +241,7 @@ void selection_sort(float *arr, int len)
         for (int j = i + 1; j < len; j++) // Define child loop counter (2) as minimum value of sub-array
         {
             // Iterate through entire sub-array testing each element against currect minimum value
-            if (*(arr + j) < *(arr + min_value))
+            if (*arr + j < *arr + min_value)
             {
                 min_value = j; // assigns min_value as position of min value
             }
@@ -207,20 +253,22 @@ void selection_sort(float *arr, int len)
     }
 }
 
+// print function to test sorting function
+void print_arr(float *arr, int len)
+{
+    float *array_end = arr + len;
+    for (; arr < array_end; arr++)
+    {
+        printf("%f  ", *arr);
+    }
+}
+
 void swap(float *a, float *b)
 {
     float temp;
     temp = *a;
     *a = *b;
     *b = temp;
-}
-
-void print_arr(float *arr, int len)
-{
-    for (int j = 0; j < len; j++)
-    {
-        printf("%f  ", *(arr + j));
-    }
 }
 
 // Extra:
